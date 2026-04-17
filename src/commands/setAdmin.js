@@ -3,6 +3,7 @@ const { SlashCommandBuilder } = require("discord.js");
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("setadmin")
+    .setDescription("Set admin role")
     .addRoleOption(o => o.setName("role").setRequired(true)),
 
   async execute(i, config) {
