@@ -18,13 +18,40 @@ const client = new Client({
   partials: [Partials.Channel]
 });
 
-client.once("ready", () => {
+client.once("clientReady", () => {
   console.log("Bot ready");
   autoclose(client);
 });
 
 client.on("messageCreate", (msg) => modmail(client, msg));
-client.on("interactionCreate", (i) => buttons(i));
+
+client.on("interactionCreate", async (interaction) => {
+  // 🔘 BUTTON
+  if (interaction.isButton()) {
+    return buttons(interaction);
+  }
+
+  // ⚡ SLASH COMMAND
+  if (interaction.isChatInputCommand()) {
+    try {
+      const command = require(`./commands/${interaction.commandName}`);
+
+      if (!command) return;
+
+      await command.execute(interaction, config);
+
+    } catch (err) {
+      console.error(err);
+
+      if (!interaction.replied) {
+        await interaction.reply({
+          content: "❌ Lỗi khi chạy command",
+          ephemeral: true
+        });
+      }
+    }
+  }
+});
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("Mongo OK"));
