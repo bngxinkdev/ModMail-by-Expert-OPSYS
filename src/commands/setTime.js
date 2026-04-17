@@ -3,11 +3,18 @@ const { SlashCommandBuilder } = require("discord.js");
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("settime")
-    .setDescription("Set autoclose time")
-    .addIntegerOption(o => o.setName("minutes").setRequired(true)),
+    .setDescription("Set auto close time")
+    .addIntegerOption(option =>
+      option
+        .setName("minutes")
+        .setDescription("Time in minutes") // 🔥 FIX
+        .setRequired(true)
+    ),
 
-  async execute(i, config) {
-    config.autoClose = i.options.getInteger("minutes");
-    i.reply("Set auto close time");
+  async execute(interaction, config) {
+    const time = interaction.options.getInteger("minutes");
+    config.autoClose = time;
+
+    await interaction.reply(`⏱️ Set auto close: ${time} phút`);
   }
 };

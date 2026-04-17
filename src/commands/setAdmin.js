@@ -3,11 +3,18 @@ const { SlashCommandBuilder } = require("discord.js");
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("setadmin")
-    .setDescription("Set admin role")
-    .addRoleOption(o => o.setName("role").setRequired(true)),
+    .setDescription("Add admin role")
+    .addRoleOption(option =>
+      option
+        .setName("role")
+        .setDescription("Role admin") // 🔥 FIX
+        .setRequired(true)
+    ),
 
-  async execute(i, config) {
-    config.adminRoles.push(i.options.getRole("role").id);
-    i.reply("Added admin role");
+  async execute(interaction, config) {
+    const role = interaction.options.getRole("role");
+    config.adminRoles.push(role.id);
+
+    await interaction.reply(`✅ Added admin role: ${role.name}`);
   }
 };

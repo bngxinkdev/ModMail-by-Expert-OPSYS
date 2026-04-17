@@ -3,11 +3,9 @@ const { SlashCommandBuilder } = require("discord.js");
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("setup")
-    .setDescription("Setup modmail")
-    .addChannelOption(o => o.setName("category").setRequired(true)),
+    .setDescription("Setup modmail system"),
 
-  async execute(i, config) {
-    config.category = i.options.getChannel("category").id;
-    i.reply("Setup xong ✅");
+  async execute(interaction) {
+    await interaction.reply("✅ Setup done");
   }
 };
